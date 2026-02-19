@@ -1,96 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 120 35% 8%;
+    --foreground: 35 40% 85%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 120 28% 12%;
+    --card-foreground: 35 40% 85%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 120 28% 10%;
+    --popover-foreground: 35 40% 85%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 45 55% 55%;
+    --primary-foreground: 120 30% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 120 28% 18%;
+    --secondary-foreground: 35 40% 85%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 120 20% 14%;
+    --muted-foreground: 35 20% 55%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 25 70% 50%;
+    --accent-foreground: 35 40% 90%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 120 30% 25%;
+    --input: 120 25% 20%;
+    --ring: 45 55% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0px;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 120 28% 10%;
+    --sidebar-foreground: 35 40% 85%;
+    --sidebar-primary: 45 55% 55%;
+    --sidebar-primary-foreground: 120 30% 8%;
+    --sidebar-accent: 120 28% 18%;
+    --sidebar-accent-foreground: 35 40% 85%;
+    --sidebar-border: 120 30% 25%;
+    --sidebar-ring: 45 55% 55%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --pixel-green: 120 40% 35%;
+    --pixel-darkgreen: 120 35% 15%;
+    --pixel-brown: 30 40% 30%;
+    --pixel-water: 200 50% 40%;
+    --pixel-path: 35 30% 45%;
+    --pixel-gold: 45 80% 55%;
   }
 }
 
@@ -101,5 +61,141 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Press Start 2P', monospace;
+    image-rendering: pixelated;
+  }
+}
+
+@layer components {
+  .pixel-border {
+    border: 4px solid hsl(var(--border));
+    box-shadow:
+      inset -4px -4px 0px 0px hsl(120 20% 10%),
+      inset 4px 4px 0px 0px hsl(120 30% 30%),
+      4px 4px 0px 0px hsl(0 0% 0% / 0.5);
+  }
+
+  .pixel-border-gold {
+    border: 4px solid hsl(var(--primary));
+    box-shadow:
+      inset -4px -4px 0px 0px hsl(45 40% 35%),
+      inset 4px 4px 0px 0px hsl(45 70% 70%),
+      4px 4px 0px 0px hsl(0 0% 0% / 0.5);
+  }
+
+  .pixel-btn {
+    @apply px-4 py-3 text-xs cursor-pointer transition-all;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 3px solid hsl(45 70% 70%);
+    box-shadow:
+      inset -3px -3px 0px 0px hsl(45 40% 35%),
+      inset 3px 3px 0px 0px hsl(45 80% 75%),
+      3px 3px 0px 0px hsl(0 0% 0% / 0.5);
+    font-family: 'Press Start 2P', monospace;
+  }
+
+  .pixel-btn:hover {
+    background: hsl(45 60% 60%);
+    transform: translate(-1px, -1px);
+    box-shadow:
+      inset -3px -3px 0px 0px hsl(45 40% 40%),
+      inset 3px 3px 0px 0px hsl(45 80% 80%),
+      5px 5px 0px 0px hsl(0 0% 0% / 0.5);
+  }
+
+  .pixel-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow:
+      inset 3px 3px 0px 0px hsl(45 40% 35%),
+      inset -3px -3px 0px 0px hsl(45 80% 75%),
+      1px 1px 0px 0px hsl(0 0% 0% / 0.5);
+  }
+
+  .pixel-btn-secondary {
+    @apply pixel-btn;
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    border-color: hsl(var(--border));
+    box-shadow:
+      inset -3px -3px 0px 0px hsl(120 20% 10%),
+      inset 3px 3px 0px 0px hsl(120 30% 30%),
+      3px 3px 0px 0px hsl(0 0% 0% / 0.5);
+  }
+
+  .pixel-btn-secondary:hover {
+    background: hsl(120 28% 22%);
+  }
+
+  .pixel-input {
+    @apply w-full px-3 py-2 text-xs;
+    background: hsl(120 30% 6%);
+    color: hsl(var(--foreground));
+    border: 3px solid hsl(var(--border));
+    box-shadow: inset 3px 3px 0px 0px hsl(0 0% 0% / 0.3);
+    font-family: 'Press Start 2P', monospace;
+    outline: none;
+  }
+
+  .pixel-input:focus {
+    border-color: hsl(var(--primary));
+    box-shadow: inset 3px 3px 0px 0px hsl(0 0% 0% / 0.3), 0 0 0 1px hsl(var(--primary));
+  }
+
+  .retro-panel {
+    @apply pixel-border p-4;
+    background: hsl(var(--card));
+  }
+
+  .retro-title {
+    @apply text-lg;
+    color: hsl(var(--primary));
+    text-shadow: 2px 2px 0px hsl(0 0% 0% / 0.5);
+  }
+
+  .retro-text {
+    @apply text-xs leading-relaxed;
+    color: hsl(var(--foreground));
+  }
+
+  .pixel-toast {
+    @apply pixel-border p-3;
+    background: hsl(var(--card));
+    animation: toast-slide-in 0.3s ease-out;
+  }
+
+  @keyframes toast-slide-in {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes toast-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes pixel-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .pixel-blink {
+    animation: pixel-blink 1s step-end infinite;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  .pixel-shake {
+    animation: shake 0.3s ease-in-out;
   }
 }
