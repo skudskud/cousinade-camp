@@ -83,14 +83,14 @@ const AvatarBuilder = () => {
     value: number;
     onChange: (i: number) => void;
   }) => (
-    <div className="mb-4">
-      <div className="text-[8px] text-foreground mb-2">{label}</div>
-      <div className="flex gap-2 flex-wrap">
+    <div className="mb-6">
+      <div className="text-sm text-foreground mb-3">{label}</div>
+      <div className="flex gap-3 flex-wrap">
         {options.map((color, i) => (
           <button
             key={i}
             onClick={() => onChange(i)}
-            className={`px-3 py-2 text-[7px] font-pixel transition-all ${
+            className={`px-4 py-3 text-xs font-pixel transition-all ${
               value === i
                 ? 'pixel-border-gold bg-secondary'
                 : 'pixel-border bg-muted hover:bg-secondary'
@@ -99,8 +99,8 @@ const AvatarBuilder = () => {
           >
             {color !== 'none' && (
               <span
-                className="inline-block w-3 h-3 mr-1"
-                style={{ backgroundColor: color, border: '1px solid #000' }}
+                className="inline-block w-4 h-4 mr-2"
+                style={{ backgroundColor: color, border: '2px solid #000' }}
               />
             )}
             {labels[i]}
@@ -112,19 +112,19 @@ const AvatarBuilder = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="retro-panel max-w-lg w-full">
-        <h1 className="retro-title text-sm mb-2 text-center">Crée ton ourson 🐻</h1>
-        <p className="text-[7px] text-muted-foreground text-center mb-6">
+      <div className="retro-panel max-w-2xl w-full">
+        <h1 className="retro-title text-lg mb-3 text-center">Crée ton ourson 🐻</h1>
+        <p className="text-sm text-muted-foreground text-center mb-8">
           {personName}
         </p>
 
         {/* Preview */}
-        <div className="flex justify-center mb-6 p-4 bg-muted">
+        <div className="flex justify-center mb-8 p-6 bg-muted">
           <PixelBear
             hatColor={HAT_OPTIONS[hatIdx]}
             topColor={TOP_OPTIONS[topIdx]}
             bottomColor={BOTTOM_OPTIONS[bottomIdx]}
-            size={128}
+            size={160}
           />
         </div>
 
@@ -150,11 +150,11 @@ const AvatarBuilder = () => {
           onChange={setBottomIdx}
         />
 
-        <div className="flex gap-3 mt-6">
-          <button onClick={randomize} className="pixel-btn-secondary flex-1">
+        <div className="flex gap-4 mt-8">
+          <button onClick={randomize} className="pixel-btn-secondary flex-1 text-sm">
             🎲 Random
           </button>
-          <button onClick={save} disabled={saving} className="pixel-btn flex-1 disabled:opacity-50">
+          <button onClick={save} disabled={saving} className="pixel-btn flex-1 disabled:opacity-50 text-sm">
             {saving ? '...' : '💾 Sauvegarder'}
           </button>
         </div>

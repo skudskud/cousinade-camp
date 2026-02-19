@@ -91,23 +91,23 @@ const IdentitySelection = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="retro-panel max-w-md w-full">
-        <h1 className="retro-title text-sm mb-6 text-center">Qui es-tu ? 👋</h1>
+      <div className="retro-panel max-w-lg w-full">
+        <h1 className="retro-title text-lg mb-8 text-center">Qui es-tu ? 👋</h1>
 
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher un nom..."
-          className="pixel-input mb-4"
+          className="pixel-input mb-6 text-sm"
         />
 
-        <div className="max-h-60 overflow-y-auto mb-4 space-y-1">
+        <div className="max-h-72 overflow-y-auto mb-6 space-y-2">
           {filtered.map(name => (
             <button
               key={name}
               onClick={() => setSelected(name)}
-              className={`w-full text-left px-3 py-2 text-[8px] transition-colors ${
+              className={`w-full text-left px-4 py-3 text-sm transition-colors ${
                 selected === name
                   ? 'bg-primary text-primary-foreground'
                   : 'bg-secondary text-secondary-foreground hover:bg-muted'
@@ -120,7 +120,7 @@ const IdentitySelection = () => {
         </div>
 
         {warning && (
-          <div className="text-accent text-[7px] mb-3 p-2 bg-muted">
+          <div className="text-accent text-xs mb-4 p-3 bg-muted">
             ⚠️ {warning}
           </div>
         )}
@@ -128,7 +128,7 @@ const IdentitySelection = () => {
         <button
           onClick={handleConfirm}
           disabled={!selected || loading}
-          className="pixel-btn w-full disabled:opacity-50"
+          className="pixel-btn w-full disabled:opacity-50 text-sm"
         >
           {loading ? 'Chargement...' : selected ? `C'est moi : ${selected}` : 'Choisis ton nom'}
         </button>

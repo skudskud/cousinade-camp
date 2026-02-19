@@ -157,14 +157,14 @@ const RoomView = ({ roomId, onClose, personId, personName, avatarConfig, presenc
   return (
     <div className="fixed inset-0 bg-background z-50 flex flex-col">
       {/* Top bar */}
-      <div className="flex items-center justify-between p-3 bg-card pixel-border" style={{ borderTop: 'none' }}>
-        <div className="flex items-center gap-3">
-          <span className="retro-title text-[10px]">{room.name}</span>
+      <div className="flex items-center justify-between p-4 bg-card pixel-border" style={{ borderTop: 'none' }}>
+        <div className="flex items-center gap-4">
+          <span className="retro-title text-base">{room.name}</span>
         </div>
-        <span className="text-[8px] text-accent">
+        <span className="text-sm text-accent">
           🟢 {presenceCount} cousin{presenceCount > 1 ? 's' : ''} connecté{presenceCount > 1 ? 's' : ''}
         </span>
-        <button onClick={onClose} className="pixel-btn-secondary text-[7px]">
+        <button onClick={onClose} className="pixel-btn-secondary text-xs">
           ← Retour à la map (Esc)
         </button>
       </div>
@@ -172,14 +172,14 @@ const RoomView = ({ roomId, onClose, personId, personName, avatarConfig, presenc
       {/* Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left: Prompts */}
-        <div className="w-80 bg-card pixel-border overflow-y-auto p-3 flex flex-col" style={{ borderTop: 'none' }}>
-          <h3 className="text-[8px] text-primary mb-3">📝 Questions</h3>
-          <div className="space-y-2 flex-1">
+        <div className="w-96 bg-card pixel-border overflow-y-auto p-4 flex flex-col" style={{ borderTop: 'none' }}>
+          <h3 className="text-sm text-primary mb-4">📝 Questions</h3>
+          <div className="space-y-3 flex-1">
             {room.prompts.map(prompt => (
               <button
                 key={prompt.key}
                 onClick={() => { setActivePrompt(prompt); setInputValue(''); setError(''); }}
-                className="w-full text-left p-2 text-[7px] bg-muted hover:bg-secondary transition-colors text-foreground"
+                className="w-full text-left p-3 text-xs bg-muted hover:bg-secondary transition-colors text-foreground"
                 style={{ fontFamily: '"Press Start 2P"' }}
               >
                 ▶ {prompt.label}
@@ -189,13 +189,13 @@ const RoomView = ({ roomId, onClose, personId, personName, avatarConfig, presenc
         </div>
 
         {/* Right: Board */}
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[9px] text-primary">📋 Tableau des idées</h3>
-            <div className="flex gap-1 flex-wrap">
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-sm text-primary">📋 Tableau des idées</h3>
+            <div className="flex gap-2 flex-wrap">
               <button
                 onClick={() => setFilter(null)}
-                className={`text-[6px] px-2 py-1 ${!filter ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
+                className={`text-xs px-3 py-2 ${!filter ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
                 style={{ fontFamily: '"Press Start 2P"' }}
               >
                 Tout
@@ -204,55 +204,55 @@ const RoomView = ({ roomId, onClose, personId, personName, avatarConfig, presenc
                 <button
                   key={p.key}
                   onClick={() => setFilter(p.key)}
-                  className={`text-[6px] px-2 py-1 ${filter === p.key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
+                  className={`text-xs px-3 py-2 ${filter === p.key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
                   style={{ fontFamily: '"Press Start 2P"' }}
                 >
-                  {p.label.slice(0, 15)}..
+                  {p.label.slice(0, 12)}..
                 </button>
               ))}
             </div>
           </div>
 
           {displayedAnswers.length === 0 && (
-            <div className="text-center text-muted-foreground text-[8px] mt-8">
+            <div className="text-center text-muted-foreground text-sm mt-12">
               Aucune idée pour le moment... Sois le premier ! 🎉
             </div>
           )}
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             {displayedAnswers.map(answer => (
-              <div key={answer.id} className="bg-card pixel-border p-3 flex items-start gap-3">
+              <div key={answer.id} className="bg-card pixel-border p-4 flex items-start gap-4">
                 <div className="flex-shrink-0">
                   {answer.avatars ? (
                     <PixelBear
                       hatColor={answer.avatars.hat_color}
                       topColor={answer.avatars.top_color}
                       bottomColor={answer.avatars.bottom_color}
-                      size={28}
+                      size={40}
                     />
                   ) : (
-                    <div className="w-7 h-7 bg-muted" />
+                    <div className="w-10 h-10 bg-muted" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[7px] text-primary font-bold">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-xs text-primary font-bold">
                       {answer.people?.display_name || '?'}
                     </span>
-                    <span className="text-[6px] text-muted-foreground">
+                    <span className="text-xs text-muted-foreground">
                       {promptLabels.get(answer.prompt_key) || answer.prompt_key}
                     </span>
                   </div>
-                  <div className="text-[8px] text-foreground mb-1">
+                  <div className="text-sm text-foreground mb-2">
                     {answer.value_text || `${answer.value_number}€`}
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[6px] text-muted-foreground">
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs text-muted-foreground">
                       {timeAgo(answer.created_at)}
                     </span>
                     <button
                       onClick={() => handleVote(answer.id, answer.voted_by_me)}
-                      className={`text-[7px] ${answer.voted_by_me ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
+                      className={`text-xs ${answer.voted_by_me ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
                       style={{ fontFamily: '"Press Start 2P"' }}
                     >
                       {answer.voted_by_me ? '❤️' : '🤍'} +{answer.vote_count}
@@ -268,19 +268,19 @@ const RoomView = ({ roomId, onClose, personId, personName, avatarConfig, presenc
       {/* Prompt modal */}
       {activePrompt && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70">
-          <div className="retro-panel max-w-md w-full">
-            <h3 className="retro-title text-[9px] mb-4">{activePrompt.label}</h3>
-            <div className="mb-2 text-[7px] text-muted-foreground">
+          <div className="retro-panel max-w-lg w-full">
+            <h3 className="retro-title text-base mb-6">{activePrompt.label}</h3>
+            <div className="mb-3 text-sm text-muted-foreground">
               {personName}, ta réponse :
             </div>
 
             {activePrompt.type === 'choice' ? (
-              <div className="flex gap-2 mb-4">
+              <div className="flex gap-3 mb-6">
                 {activePrompt.choices!.map(c => (
                   <button
                     key={c}
                     onClick={() => setInputValue(c)}
-                    className={`pixel-btn text-[7px] flex-1 ${inputValue === c ? '' : 'pixel-btn-secondary'}`}
+                    className={`pixel-btn text-xs flex-1 ${inputValue === c ? '' : 'pixel-btn-secondary'}`}
                   >
                     {c}
                   </button>
@@ -292,27 +292,27 @@ const RoomView = ({ roomId, onClose, personId, personName, avatarConfig, presenc
                 value={inputValue}
                 onChange={e => { setInputValue(e.target.value); setError(''); }}
                 onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
-                className="pixel-input mb-4"
+                className="pixel-input mb-6 text-sm"
                 placeholder={activePrompt.type === 'number' ? '0' : 'Ta réponse...'}
                 autoFocus
               />
             )}
 
             {error && (
-              <div className="text-destructive text-[7px] mb-3">❌ {error}</div>
+              <div className="text-destructive text-xs mb-4">❌ {error}</div>
             )}
 
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <button
                 onClick={() => setActivePrompt(null)}
-                className="pixel-btn-secondary flex-1 text-[7px]"
+                className="pixel-btn-secondary flex-1 text-xs"
               >
                 Annuler
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={submitting || !inputValue.trim()}
-                className="pixel-btn flex-1 text-[7px] disabled:opacity-50"
+                className="pixel-btn flex-1 text-xs disabled:opacity-50"
               >
                 {submitting ? '...' : '✅ Valider'}
               </button>

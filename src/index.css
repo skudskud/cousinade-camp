@@ -6,51 +6,51 @@
 
 @layer base {
   :root {
-    --background: 120 35% 8%;
-    --foreground: 35 40% 85%;
+    --background: 220 25% 18%;
+    --foreground: 45 30% 90%;
 
-    --card: 120 28% 12%;
-    --card-foreground: 35 40% 85%;
+    --card: 220 20% 24%;
+    --card-foreground: 45 30% 90%;
 
-    --popover: 120 28% 10%;
-    --popover-foreground: 35 40% 85%;
+    --popover: 220 22% 20%;
+    --popover-foreground: 45 30% 90%;
 
-    --primary: 45 55% 55%;
-    --primary-foreground: 120 30% 8%;
+    --primary: 45 80% 60%;
+    --primary-foreground: 220 25% 15%;
 
-    --secondary: 120 28% 18%;
-    --secondary-foreground: 35 40% 85%;
+    --secondary: 200 35% 35%;
+    --secondary-foreground: 45 30% 90%;
 
-    --muted: 120 20% 14%;
-    --muted-foreground: 35 20% 55%;
+    --muted: 220 18% 28%;
+    --muted-foreground: 45 20% 60%;
 
-    --accent: 25 70% 50%;
-    --accent-foreground: 35 40% 90%;
+    --accent: 25 75% 55%;
+    --accent-foreground: 45 40% 95%;
 
-    --destructive: 0 65% 50%;
+    --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 120 30% 25%;
-    --input: 120 25% 20%;
-    --ring: 45 55% 55%;
+    --border: 200 30% 35%;
+    --input: 220 20% 22%;
+    --ring: 45 80% 60%;
 
     --radius: 0px;
 
-    --sidebar-background: 120 28% 10%;
-    --sidebar-foreground: 35 40% 85%;
-    --sidebar-primary: 45 55% 55%;
-    --sidebar-primary-foreground: 120 30% 8%;
-    --sidebar-accent: 120 28% 18%;
-    --sidebar-accent-foreground: 35 40% 85%;
-    --sidebar-border: 120 30% 25%;
-    --sidebar-ring: 45 55% 55%;
+    --sidebar-background: 220 22% 20%;
+    --sidebar-foreground: 45 30% 90%;
+    --sidebar-primary: 45 80% 60%;
+    --sidebar-primary-foreground: 220 25% 15%;
+    --sidebar-accent: 200 35% 35%;
+    --sidebar-accent-foreground: 45 30% 90%;
+    --sidebar-border: 200 30% 35%;
+    --sidebar-ring: 45 80% 60%;
 
-    --pixel-green: 120 40% 35%;
-    --pixel-darkgreen: 120 35% 15%;
-    --pixel-brown: 30 40% 30%;
-    --pixel-water: 200 50% 40%;
-    --pixel-path: 35 30% 45%;
-    --pixel-gold: 45 80% 55%;
+    --pixel-green: 150 45% 55%;
+    --pixel-darkgreen: 150 40% 35%;
+    --pixel-brown: 30 45% 45%;
+    --pixel-water: 195 70% 65%;
+    --pixel-path: 40 50% 70%;
+    --pixel-gold: 45 85% 60%;
   }
 }
 
@@ -70,46 +70,46 @@
   .pixel-border {
     border: 4px solid hsl(var(--border));
     box-shadow:
-      inset -4px -4px 0px 0px hsl(120 20% 10%),
-      inset 4px 4px 0px 0px hsl(120 30% 30%),
-      4px 4px 0px 0px hsl(0 0% 0% / 0.5);
+      inset -4px -4px 0px 0px hsl(220 20% 15%),
+      inset 4px 4px 0px 0px hsl(200 30% 45%),
+      4px 4px 0px 0px hsl(0 0% 0% / 0.4);
   }
 
   .pixel-border-gold {
     border: 4px solid hsl(var(--primary));
     box-shadow:
-      inset -4px -4px 0px 0px hsl(45 40% 35%),
-      inset 4px 4px 0px 0px hsl(45 70% 70%),
-      4px 4px 0px 0px hsl(0 0% 0% / 0.5);
+      inset -4px -4px 0px 0px hsl(45 50% 40%),
+      inset 4px 4px 0px 0px hsl(45 80% 75%),
+      4px 4px 0px 0px hsl(0 0% 0% / 0.4);
   }
 
   .pixel-btn {
-    @apply px-4 py-3 text-xs cursor-pointer transition-all;
+    @apply px-5 py-3 cursor-pointer transition-all;
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
-    border: 3px solid hsl(45 70% 70%);
+    border: 3px solid hsl(45 80% 75%);
     box-shadow:
-      inset -3px -3px 0px 0px hsl(45 40% 35%),
-      inset 3px 3px 0px 0px hsl(45 80% 75%),
-      3px 3px 0px 0px hsl(0 0% 0% / 0.5);
+      inset -3px -3px 0px 0px hsl(45 50% 40%),
+      inset 3px 3px 0px 0px hsl(45 90% 80%),
+      3px 3px 0px 0px hsl(0 0% 0% / 0.4);
     font-family: 'Press Start 2P', monospace;
   }
 
   .pixel-btn:hover {
-    background: hsl(45 60% 60%);
+    background: hsl(45 75% 65%);
     transform: translate(-1px, -1px);
     box-shadow:
-      inset -3px -3px 0px 0px hsl(45 40% 40%),
-      inset 3px 3px 0px 0px hsl(45 80% 80%),
-      5px 5px 0px 0px hsl(0 0% 0% / 0.5);
+      inset -3px -3px 0px 0px hsl(45 50% 45%),
+      inset 3px 3px 0px 0px hsl(45 90% 85%),
+      5px 5px 0px 0px hsl(0 0% 0% / 0.4);
   }
 
   .pixel-btn:active {
     transform: translate(2px, 2px);
     box-shadow:
-      inset 3px 3px 0px 0px hsl(45 40% 35%),
-      inset -3px -3px 0px 0px hsl(45 80% 75%),
-      1px 1px 0px 0px hsl(0 0% 0% / 0.5);
+      inset 3px 3px 0px 0px hsl(45 50% 40%),
+      inset -3px -3px 0px 0px hsl(45 90% 80%),
+      1px 1px 0px 0px hsl(0 0% 0% / 0.4);
   }
 
   .pixel-btn-secondary {
@@ -118,18 +118,18 @@
     color: hsl(var(--secondary-foreground));
     border-color: hsl(var(--border));
     box-shadow:
-      inset -3px -3px 0px 0px hsl(120 20% 10%),
-      inset 3px 3px 0px 0px hsl(120 30% 30%),
-      3px 3px 0px 0px hsl(0 0% 0% / 0.5);
+      inset -3px -3px 0px 0px hsl(200 25% 25%),
+      inset 3px 3px 0px 0px hsl(200 35% 50%),
+      3px 3px 0px 0px hsl(0 0% 0% / 0.4);
   }
 
   .pixel-btn-secondary:hover {
-    background: hsl(120 28% 22%);
+    background: hsl(200 35% 40%);
   }
 
   .pixel-input {
-    @apply w-full px-3 py-2 text-xs;
-    background: hsl(120 30% 6%);
+    @apply w-full px-4 py-3;
+    background: hsl(220 25% 12%);
     color: hsl(var(--foreground));
     border: 3px solid hsl(var(--border));
     box-shadow: inset 3px 3px 0px 0px hsl(0 0% 0% / 0.3);
@@ -139,7 +139,7 @@
 
   .pixel-input:focus {
     border-color: hsl(var(--primary));
-    box-shadow: inset 3px 3px 0px 0px hsl(0 0% 0% / 0.3), 0 0 0 1px hsl(var(--primary));
+    box-shadow: inset 3px 3px 0px 0px hsl(0 0% 0% / 0.3), 0 0 0 2px hsl(var(--primary) / 0.5);
   }
 
   .retro-panel {

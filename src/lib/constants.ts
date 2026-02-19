@@ -96,7 +96,7 @@ export const MAP_DATA: number[][] = [
 
 export const MAP_WIDTH = 20;
 export const MAP_HEIGHT = 15;
-export const TILE_SIZE = 48;
+export const TILE_SIZE = 64;
 
 export const ZONE_POSITIONS: Record<RoomId, { x: number; y: number }> = {
   cuisine: { x: 9, y: 5 },

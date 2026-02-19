@@ -9,17 +9,17 @@ import PixelBear from '@/components/PixelBear';
 import RoomView from '@/pages/RoomView';
 
 const TILE_COLORS: Record<number, string> = {
-  [TILE.GRASS]: '#2d5a1e',
-  [TILE.TREE]: '#1a3a10',
-  [TILE.WATER]: '#1a4a6a',
-  [TILE.PATH]: '#8a7a5a',
-  [TILE.ROCK]: '#5a5a5a',
-  [TILE.CABIN]: '#6a4a2a',
-  [TILE.ZONE_CUISINE]: '#8a7a5a',
-  [TILE.ZONE_JEUX]: '#8a7a5a',
-  [TILE.ZONE_PISCINE]: '#8a7a5a',
-  [TILE.SIGN]: '#7a6a3a',
-  [TILE.FLOWER]: '#2d5a1e',
+  [TILE.GRASS]: '#7ec8a3',
+  [TILE.TREE]: '#5ba37d',
+  [TILE.WATER]: '#87ceeb',
+  [TILE.PATH]: '#e8d4a8',
+  [TILE.ROCK]: '#b8b8b8',
+  [TILE.CABIN]: '#deb887',
+  [TILE.ZONE_CUISINE]: '#ffe4b5',
+  [TILE.ZONE_JEUX]: '#ffe4b5',
+  [TILE.ZONE_PISCINE]: '#ffe4b5',
+  [TILE.SIGN]: '#d4a574',
+  [TILE.FLOWER]: '#98d8a8',
 };
 
 const ZONE_LABELS: Record<string, string> = {
@@ -129,8 +129,10 @@ const OverworldMap = () => {
     return () => { supabase.removeChannel(channel); };
   }, [personId]);
 
-  // Draw map
+  // Draw map - re-run when activeRoom changes (null = returning from room)
   useEffect(() => {
+    if (activeRoom) return; // Don't draw when in room view
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -143,67 +145,66 @@ const OverworldMap = () => {
     for (let y = 0; y < MAP_HEIGHT; y++) {
       for (let x = 0; x < MAP_WIDTH; x++) {
         const tile = MAP_DATA[y][x];
-        ctx.fillStyle = TILE_COLORS[tile] || '#2d5a1e';
+        ctx.fillStyle = TILE_COLORS[tile] || '#7ec8a3';
         ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
         // Add details
         if (tile === TILE.TREE) {
-          ctx.fillStyle = '#0d2a06';
-          ctx.fillRect(x * TILE_SIZE + 8, y * TILE_SIZE + 4, 32, 28);
-          ctx.fillStyle = '#4a2a0a';
-          ctx.fillRect(x * TILE_SIZE + 20, y * TILE_SIZE + 32, 8, 16);
+          ctx.fillStyle = '#4a9c6d';
+          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 6, 40, 36);
+          ctx.fillStyle = '#8b5a2b';
+          ctx.fillRect(x * TILE_SIZE + 28, y * TILE_SIZE + 42, 10, 20);
         } else if (tile === TILE.WATER) {
-          ctx.fillStyle = '#2a5a8a';
-          ctx.fillRect(x * TILE_SIZE + 4, y * TILE_SIZE + 8, 40, 4);
-          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 24, 32, 4);
+          ctx.fillStyle = '#87ceeb';
+          ctx.fillRect(x * TILE_SIZE + 6, y * TILE_SIZE + 12, 50, 6);
+          ctx.fillRect(x * TILE_SIZE + 18, y * TILE_SIZE + 30, 40, 6);
         } else if (tile === TILE.ROCK) {
-          ctx.fillStyle = '#7a7a7a';
-          ctx.fillRect(x * TILE_SIZE + 8, y * TILE_SIZE + 12, 32, 24);
-          ctx.fillStyle = '#9a9a9a';
-          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 16, 20, 12);
+          ctx.fillStyle = '#a9a9a9';
+          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 18, 40, 30);
+          ctx.fillStyle = '#c9c9c9';
+          ctx.fillRect(x * TILE_SIZE + 18, y * TILE_SIZE + 24, 26, 16);
         } else if (tile === TILE.CABIN) {
-          ctx.fillStyle = '#8a5a2a';
-          ctx.fillRect(x * TILE_SIZE + 4, y * TILE_SIZE + 8, 40, 36);
-          ctx.fillStyle = '#aa3a1a';
-          ctx.fillRect(x * TILE_SIZE + 2, y * TILE_SIZE + 2, 44, 12);
-          ctx.fillStyle = '#3a2a1a';
-          ctx.fillRect(x * TILE_SIZE + 16, y * TILE_SIZE + 24, 16, 20);
+          ctx.fillStyle = '#deb887';
+          ctx.fillRect(x * TILE_SIZE + 6, y * TILE_SIZE + 12, 52, 44);
+          ctx.fillStyle = '#cd853f';
+          ctx.fillRect(x * TILE_SIZE + 3, y * TILE_SIZE + 3, 58, 15);
+          ctx.fillStyle = '#8b4513';
+          ctx.fillRect(x * TILE_SIZE + 24, y * TILE_SIZE + 32, 20, 26);
         } else if (tile === TILE.SIGN) {
-          ctx.fillStyle = '#5a4a2a';
-          ctx.fillRect(x * TILE_SIZE + 20, y * TILE_SIZE + 20, 8, 28);
-          ctx.fillStyle = '#8a7a4a';
-          ctx.fillRect(x * TILE_SIZE + 8, y * TILE_SIZE + 8, 32, 16);
+          ctx.fillStyle = '#8b5a2b';
+          ctx.fillRect(x * TILE_SIZE + 28, y * TILE_SIZE + 28, 10, 36);
+          ctx.fillStyle = '#deb887';
+          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 12, 42, 20);
         } else if (tile === TILE.FLOWER) {
-          ctx.fillStyle = '#4a8a2a';
-          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 28, 4, 12);
-          ctx.fillStyle = '#ea4a5a';
-          ctx.fillRect(x * TILE_SIZE + 8, y * TILE_SIZE + 20, 12, 12);
+          ctx.fillStyle = '#90ee90';
+          ctx.fillRect(x * TILE_SIZE + 18, y * TILE_SIZE + 36, 6, 18);
+          ctx.fillStyle = '#ffb6c1';
+          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 26, 18, 16);
         } else if (tile === TILE.ZONE_CUISINE || tile === TILE.ZONE_JEUX || tile === TILE.ZONE_PISCINE) {
-          // Zone marker
-          ctx.fillStyle = 'rgba(200, 168, 78, 0.3)';
+          ctx.fillStyle = 'rgba(255, 223, 128, 0.4)';
           ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         }
 
         // Grid lines (subtle)
-        ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+        ctx.strokeStyle = 'rgba(0,0,0,0.08)';
         ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
       }
     }
 
     // Zone labels
-    ctx.font = '10px "Press Start 2P"';
+    ctx.font = '14px "Press Start 2P"';
     ctx.textAlign = 'center';
     Object.entries(ZONE_POSITIONS).forEach(([room, zpos]) => {
       ctx.fillStyle = '#ffd700';
       ctx.strokeStyle = '#000';
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 4;
       const label = ZONE_LABELS[room] || room;
       const tx = zpos.x * TILE_SIZE + TILE_SIZE / 2;
-      const ty = zpos.y * TILE_SIZE - 4;
+      const ty = zpos.y * TILE_SIZE - 8;
       ctx.strokeText(label, tx, ty);
       ctx.fillText(label, tx, ty);
     });
-  }, []);
+  }, [activeRoom]);
 
   // Zone detection
   useEffect(() => {
@@ -288,9 +289,9 @@ const OverworldMap = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <div className="retro-panel text-center p-8">
-          <h1 className="retro-title text-sm mb-4">📱 Oups !</h1>
-          <p className="retro-text">Desktop only pour le moment.</p>
-          <p className="text-[7px] text-muted-foreground mt-2">Reviens sur un ordinateur !</p>
+          <h1 className="retro-title text-lg mb-4">📱 Oups !</h1>
+          <p className="text-base text-foreground">Desktop only pour le moment.</p>
+          <p className="text-sm text-muted-foreground mt-3">Reviens sur un ordinateur !</p>
         </div>
       </div>
     );
@@ -312,25 +313,25 @@ const OverworldMap = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background relative">
       {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-3 bg-card pixel-border" style={{ borderTop: 'none' }}>
-        <div className="flex items-center gap-3">
-           <PixelBear hatColor={avatarConfig.hat_color} topColor={avatarConfig.top_color} bottomColor={avatarConfig.bottom_color} size={32} />
-          <span className="text-[8px] text-foreground">{personName}</span>
-        </div>
-        <div className="text-[8px] text-primary">
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 bg-card pixel-border" style={{ borderTop: 'none' }}>
+        <button
+          onClick={() => navigate('/avatar')}
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer group"
+          title="Modifier mon personnage"
+        >
+          <PixelBear hatColor={avatarConfig.hat_color} topColor={avatarConfig.top_color} bottomColor={avatarConfig.bottom_color} size={48} />
+          <div className="flex flex-col items-start">
+            <span className="text-sm text-foreground">{personName}</span>
+            <span className="text-[10px] text-muted-foreground group-hover:text-primary">✏️ Modifier</span>
+          </div>
+        </button>
+        <div className="text-sm text-primary">
           🏕️ Cousinade 2026 — Retro Hub
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-[8px] text-accent">
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-accent">
             🟢 {presenceCount} cousin{presenceCount > 1 ? 's' : ''} connecté{presenceCount > 1 ? 's' : ''}
           </span>
-          <button
-            onClick={() => navigate('/avatar')}
-            className="text-[7px] text-muted-foreground hover:text-foreground"
-            style={{ fontFamily: '"Press Start 2P"' }}
-          >
-            ✏️
-          </button>
         </div>
       </div>
 
@@ -342,35 +343,35 @@ const OverworldMap = () => {
         <div
           className="absolute transition-all duration-150"
           style={{
-            left: pos.x * TILE_SIZE + (TILE_SIZE - 32) / 2,
-            top: pos.y * TILE_SIZE + (TILE_SIZE - 32) / 2,
-            width: 32,
-            height: 32,
+            left: pos.x * TILE_SIZE + (TILE_SIZE - 48) / 2,
+            top: pos.y * TILE_SIZE + (TILE_SIZE - 48) / 2,
+            width: 48,
+            height: 48,
             zIndex: 10,
           }}
         >
-          <PixelBear hatColor={avatarConfig.hat_color} topColor={avatarConfig.top_color} bottomColor={avatarConfig.bottom_color} size={32} />
+          <PixelBear hatColor={avatarConfig.hat_color} topColor={avatarConfig.top_color} bottomColor={avatarConfig.bottom_color} size={48} />
         </div>
       </div>
 
       {/* Tooltip */}
       {tooltip && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 retro-panel px-6 py-3 z-50">
-          <span className="text-[8px] text-primary pixel-blink">▶</span>
-          <span className="text-[8px] text-foreground ml-2">{tooltip}</span>
+        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 retro-panel px-8 py-4 z-50">
+          <span className="text-sm text-primary pixel-blink">▶</span>
+          <span className="text-sm text-foreground ml-3">{tooltip}</span>
         </div>
       )}
 
       {/* Controls hint */}
-      <div className="text-[6px] text-muted-foreground mt-4 text-center">
+      <div className="text-xs text-muted-foreground mt-6 text-center">
         ← ↑ ↓ → pour se déplacer • Entrée pour interagir
       </div>
 
       {/* Notifications */}
-      <div className="fixed top-16 right-4 z-50 space-y-2 max-w-xs">
+      <div className="fixed top-24 right-4 z-50 space-y-3 max-w-sm">
         {notifications.map(n => (
           <div key={n.id} className="pixel-toast">
-            <span className="text-[7px] text-foreground">💬 {n.text}</span>
+            <span className="text-xs text-foreground">💬 {n.text}</span>
           </div>
         ))}
       </div>
@@ -378,23 +379,23 @@ const OverworldMap = () => {
       {/* Admin modal */}
       {showAdmin && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70">
-          <div className="retro-panel max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="retro-title text-[10px]">🔧 Admin</h2>
-              <button onClick={() => setShowAdmin(false)} className="pixel-btn text-[7px]">
+          <div className="retro-panel max-w-3xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="retro-title text-base">🔧 Admin</h2>
+              <button onClick={() => setShowAdmin(false)} className="pixel-btn text-xs">
                 Fermer
               </button>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {adminAnswers.map((a: any) => (
-                <div key={a.id} className="flex justify-between items-center bg-muted p-2">
-                  <div className="text-[7px] text-foreground">
+                <div key={a.id} className="flex justify-between items-center bg-muted p-3">
+                  <div className="text-xs text-foreground">
                     <span className="text-primary">{a.people?.display_name}</span>
                     {' — '}{a.room}/{a.prompt_key}: {a.value_text || a.value_number}
                   </div>
                   <button
                     onClick={() => deleteAnswer(a.id)}
-                    className="text-[7px] text-destructive hover:underline"
+                    className="text-xs text-destructive hover:underline"
                     style={{ fontFamily: '"Press Start 2P"' }}
                   >
                     ❌
