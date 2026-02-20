@@ -173,6 +173,12 @@ const RoomView = ({ roomId, onClose, personId, personName, avatarConfig, presenc
       <div className="flex flex-1 overflow-hidden">
         {/* Left: Prompts */}
         <div className="w-96 bg-card pixel-border overflow-y-auto p-4 flex flex-col" style={{ borderTop: 'none' }}>
+          {/* Room description */}
+          <div className="mb-6 p-4 bg-muted rounded">
+            <div className="text-2xl mb-2">{room.icon}</div>
+            <p className="text-xs text-muted-foreground leading-relaxed">{room.description}</p>
+          </div>
+          
           <h3 className="text-sm text-primary mb-4">📝 Questions</h3>
           <div className="space-y-3 flex-1">
             {room.prompts.map(prompt => (

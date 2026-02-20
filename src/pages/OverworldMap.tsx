@@ -6,20 +6,27 @@ import {
 } from '@/lib/constants';
 import { supabase } from '@/integrations/supabase/client';
 import PixelBear from '@/components/PixelBear';
+import MusicPlayer from '@/components/MusicPlayer';
 import RoomView from '@/pages/RoomView';
 
 const TILE_COLORS: Record<number, string> = {
   [TILE.GRASS]: '#7ec8a3',
   [TILE.TREE]: '#5ba37d',
   [TILE.WATER]: '#87ceeb',
-  [TILE.PATH]: '#e8d4a8',
+  [TILE.PATH]: '#f5e6c8',
   [TILE.ROCK]: '#b8b8b8',
   [TILE.CABIN]: '#deb887',
-  [TILE.ZONE_CUISINE]: '#ffe4b5',
-  [TILE.ZONE_JEUX]: '#ffe4b5',
-  [TILE.ZONE_PISCINE]: '#ffe4b5',
+  [TILE.ZONE_CUISINE]: '#ffb347',
+  [TILE.ZONE_JEUX]: '#87ceeb',
+  [TILE.ZONE_PISCINE]: '#77dd77',
   [TILE.SIGN]: '#d4a574',
   [TILE.FLOWER]: '#98d8a8',
+  [TILE.BUSH]: '#6db36d',
+  [TILE.APPLE_TREE]: '#5ba37d',
+  [TILE.DUCK]: '#87ceeb',
+  [TILE.RABBIT]: '#7ec8a3',
+  [TILE.RIVER]: '#5dade2',
+  [TILE.BRIDGE]: '#c4a35a',
 };
 
 const ZONE_LABELS: Record<string, string> = {
@@ -32,6 +39,7 @@ const OverworldMap = () => {
   const navigate = useNavigate();
   const [pos, setPos] = useState(SPAWN_POS);
   const [activeRoom, setActiveRoom] = useState<RoomId | null>(null);
+  const [enteringRoom, setEnteringRoom] = useState<RoomId | null>(null);
   const [tooltip, setTooltip] = useState<string | null>(null);
   const [presenceCount, setPresenceCount] = useState(0);
   const [notifications, setNotifications] = useState<{ id: string; text: string }[]>([]);
@@ -145,49 +153,213 @@ const OverworldMap = () => {
     for (let y = 0; y < MAP_HEIGHT; y++) {
       for (let x = 0; x < MAP_WIDTH; x++) {
         const tile = MAP_DATA[y][x];
-        ctx.fillStyle = TILE_COLORS[tile] || '#7ec8a3';
+        
+        // Base grass for most tiles
+        ctx.fillStyle = '#7ec8a3';
         ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        
+        // Then draw tile-specific content
+        const tx = x * TILE_SIZE;
+        const ty = y * TILE_SIZE;
 
-        // Add details
         if (tile === TILE.TREE) {
-          ctx.fillStyle = '#4a9c6d';
-          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 6, 40, 36);
+          // Tree trunk
           ctx.fillStyle = '#8b5a2b';
-          ctx.fillRect(x * TILE_SIZE + 28, y * TILE_SIZE + 42, 10, 20);
+          ctx.fillRect(tx + 26, ty + 40, 12, 24);
+          // Tree foliage (layered circles effect)
+          ctx.fillStyle = '#228b22';
+          ctx.fillRect(tx + 10, ty + 8, 44, 36);
+          ctx.fillStyle = '#32cd32';
+          ctx.fillRect(tx + 16, ty + 12, 32, 28);
+        } else if (tile === TILE.APPLE_TREE) {
+          // Apple tree trunk
+          ctx.fillStyle = '#8b5a2b';
+          ctx.fillRect(tx + 26, ty + 40, 12, 24);
+          // Apple tree foliage
+          ctx.fillStyle = '#228b22';
+          ctx.fillRect(tx + 8, ty + 6, 48, 38);
+          ctx.fillStyle = '#32cd32';
+          ctx.fillRect(tx + 14, ty + 10, 36, 30);
+          // Apples!
+          ctx.fillStyle = '#ff6347';
+          ctx.fillRect(tx + 18, ty + 16, 8, 8);
+          ctx.fillRect(tx + 38, ty + 20, 8, 8);
+          ctx.fillRect(tx + 26, ty + 28, 8, 8);
+        } else if (tile === TILE.RIVER) {
+          // River water
+          ctx.fillStyle = '#5dade2';
+          ctx.fillRect(tx, ty, TILE_SIZE, TILE_SIZE);
+          // Water ripples
+          ctx.fillStyle = '#85c1e9';
+          ctx.fillRect(tx + 8, ty + 16, 20, 4);
+          ctx.fillRect(tx + 36, ty + 32, 20, 4);
+          ctx.fillRect(tx + 16, ty + 48, 24, 4);
+        } else if (tile === TILE.BRIDGE) {
+          // Path base
+          ctx.fillStyle = '#f5e6c8';
+          ctx.fillRect(tx, ty, TILE_SIZE, TILE_SIZE);
+          // Bridge planks
+          ctx.fillStyle = '#c4a35a';
+          ctx.fillRect(tx + 4, ty, 8, TILE_SIZE);
+          ctx.fillRect(tx + 20, ty, 8, TILE_SIZE);
+          ctx.fillRect(tx + 36, ty, 8, TILE_SIZE);
+          ctx.fillRect(tx + 52, ty, 8, TILE_SIZE);
+          // Bridge rails
+          ctx.fillStyle = '#8b4513';
+          ctx.fillRect(tx, ty + 2, TILE_SIZE, 4);
+          ctx.fillRect(tx, ty + 58, TILE_SIZE, 4);
         } else if (tile === TILE.WATER) {
           ctx.fillStyle = '#87ceeb';
-          ctx.fillRect(x * TILE_SIZE + 6, y * TILE_SIZE + 12, 50, 6);
-          ctx.fillRect(x * TILE_SIZE + 18, y * TILE_SIZE + 30, 40, 6);
+          ctx.fillRect(tx, ty, TILE_SIZE, TILE_SIZE);
+          ctx.fillStyle = '#add8e6';
+          ctx.fillRect(tx + 8, ty + 20, 24, 4);
+          ctx.fillRect(tx + 32, ty + 40, 20, 4);
+        } else if (tile === TILE.PATH) {
+          ctx.fillStyle = '#f5e6c8';
+          ctx.fillRect(tx, ty, TILE_SIZE, TILE_SIZE);
+          // Path texture
+          ctx.fillStyle = '#e8d4a8';
+          ctx.fillRect(tx + 8, ty + 12, 6, 6);
+          ctx.fillRect(tx + 40, ty + 32, 8, 8);
+          ctx.fillRect(tx + 24, ty + 48, 6, 6);
         } else if (tile === TILE.ROCK) {
+          ctx.fillStyle = '#808080';
+          ctx.fillRect(tx + 10, ty + 16, 44, 36);
           ctx.fillStyle = '#a9a9a9';
-          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 18, 40, 30);
-          ctx.fillStyle = '#c9c9c9';
-          ctx.fillRect(x * TILE_SIZE + 18, y * TILE_SIZE + 24, 26, 16);
+          ctx.fillRect(tx + 16, ty + 22, 32, 24);
+          ctx.fillStyle = '#c0c0c0';
+          ctx.fillRect(tx + 22, ty + 28, 16, 12);
         } else if (tile === TILE.CABIN) {
+          // Main building
           ctx.fillStyle = '#deb887';
-          ctx.fillRect(x * TILE_SIZE + 6, y * TILE_SIZE + 12, 52, 44);
-          ctx.fillStyle = '#cd853f';
-          ctx.fillRect(x * TILE_SIZE + 3, y * TILE_SIZE + 3, 58, 15);
+          ctx.fillRect(tx + 6, ty + 16, 52, 42);
+          // Roof
           ctx.fillStyle = '#8b4513';
-          ctx.fillRect(x * TILE_SIZE + 24, y * TILE_SIZE + 32, 20, 26);
-        } else if (tile === TILE.SIGN) {
-          ctx.fillStyle = '#8b5a2b';
-          ctx.fillRect(x * TILE_SIZE + 28, y * TILE_SIZE + 28, 10, 36);
-          ctx.fillStyle = '#deb887';
-          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 12, 42, 20);
+          ctx.fillRect(tx + 2, ty + 6, 60, 16);
+          // Door
+          ctx.fillStyle = '#654321';
+          ctx.fillRect(tx + 26, ty + 34, 16, 24);
+          // Windows
+          ctx.fillStyle = '#87ceeb';
+          ctx.fillRect(tx + 12, ty + 26, 10, 10);
+          ctx.fillRect(tx + 46, ty + 26, 10, 10);
+        } else if (tile === TILE.BUSH) {
+          ctx.fillStyle = '#228b22';
+          ctx.fillRect(tx + 12, ty + 24, 40, 32);
+          ctx.fillStyle = '#32cd32';
+          ctx.fillRect(tx + 18, ty + 30, 28, 22);
+          // Some berries
+          ctx.fillStyle = '#ff69b4';
+          ctx.fillRect(tx + 22, ty + 34, 6, 6);
+          ctx.fillRect(tx + 36, ty + 38, 6, 6);
         } else if (tile === TILE.FLOWER) {
-          ctx.fillStyle = '#90ee90';
-          ctx.fillRect(x * TILE_SIZE + 18, y * TILE_SIZE + 36, 6, 18);
+          // Stem
+          ctx.fillStyle = '#228b22';
+          ctx.fillRect(tx + 30, ty + 36, 4, 20);
+          // Petals - different colors for variety
+          const colors = ['#ff69b4', '#ffb6c1', '#ff6347', '#ffd700', '#da70d6'];
+          const color = colors[(x + y) % colors.length];
+          ctx.fillStyle = color;
+          ctx.fillRect(tx + 22, ty + 24, 20, 16);
+          // Center
+          ctx.fillStyle = '#ffd700';
+          ctx.fillRect(tx + 28, ty + 28, 8, 8);
+        } else if (tile === TILE.DUCK) {
+          // Water background
+          ctx.fillStyle = '#5dade2';
+          ctx.fillRect(tx, ty, TILE_SIZE, TILE_SIZE);
+          // Duck body
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(tx + 20, ty + 28, 24, 16);
+          // Duck head
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(tx + 38, ty + 20, 12, 12);
+          // Duck beak
+          ctx.fillStyle = '#ffa500';
+          ctx.fillRect(tx + 50, ty + 24, 8, 6);
+          // Water ripples
+          ctx.fillStyle = '#85c1e9';
+          ctx.fillRect(tx + 12, ty + 48, 16, 4);
+          ctx.fillRect(tx + 36, ty + 52, 12, 4);
+        } else if (tile === TILE.RABBIT) {
+          // Rabbit body
+          ctx.fillStyle = '#d2b48c';
+          ctx.fillRect(tx + 24, ty + 32, 20, 16);
+          // Rabbit head
+          ctx.fillRect(tx + 36, ty + 24, 14, 14);
+          // Rabbit ears
+          ctx.fillStyle = '#d2b48c';
+          ctx.fillRect(tx + 38, ty + 10, 4, 16);
+          ctx.fillRect(tx + 46, ty + 10, 4, 16);
+          // Inner ear
           ctx.fillStyle = '#ffb6c1';
-          ctx.fillRect(x * TILE_SIZE + 12, y * TILE_SIZE + 26, 18, 16);
-        } else if (tile === TILE.ZONE_CUISINE || tile === TILE.ZONE_JEUX || tile === TILE.ZONE_PISCINE) {
-          ctx.fillStyle = 'rgba(255, 223, 128, 0.4)';
-          ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          ctx.fillRect(tx + 39, ty + 12, 2, 10);
+          ctx.fillRect(tx + 47, ty + 12, 2, 10);
+          // Eye
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(tx + 46, ty + 28, 3, 3);
+          // Tail
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(tx + 20, ty + 36, 8, 8);
+        } else if (tile === TILE.ZONE_CUISINE) {
+          // Kitchen floor
+          ctx.fillStyle = '#ffb347';
+          ctx.fillRect(tx, ty, TILE_SIZE, TILE_SIZE);
+          // Stove
+          ctx.fillStyle = '#2f2f2f';
+          ctx.fillRect(tx + 16, ty + 20, 32, 28);
+          // Burners
+          ctx.fillStyle = '#ff4500';
+          ctx.fillRect(tx + 20, ty + 26, 10, 10);
+          ctx.fillRect(tx + 34, ty + 26, 10, 10);
+          // Pot
+          ctx.fillStyle = '#696969';
+          ctx.fillRect(tx + 22, ty + 16, 20, 8);
+        } else if (tile === TILE.ZONE_JEUX) {
+          // Game room floor
+          ctx.fillStyle = '#87ceeb';
+          ctx.fillRect(tx, ty, TILE_SIZE, TILE_SIZE);
+          // Game table
+          ctx.fillStyle = '#228b22';
+          ctx.fillRect(tx + 12, ty + 20, 40, 28);
+          // Dice
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(tx + 20, ty + 28, 12, 12);
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(tx + 24, ty + 32, 4, 4);
+          // Cards
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(tx + 36, ty + 26, 10, 14);
+          ctx.fillStyle = '#ff0000';
+          ctx.fillRect(tx + 40, ty + 30, 4, 4);
+        } else if (tile === TILE.ZONE_PISCINE) {
+          // Pool area
+          ctx.fillStyle = '#77dd77';
+          ctx.fillRect(tx, ty, TILE_SIZE, TILE_SIZE);
+          // Pool
+          ctx.fillStyle = '#00bfff';
+          ctx.fillRect(tx + 8, ty + 16, 48, 36);
+          ctx.fillStyle = '#87ceeb';
+          ctx.fillRect(tx + 14, ty + 22, 36, 24);
+          // Pool edge
+          ctx.fillStyle = '#f5f5dc';
+          ctx.fillRect(tx + 6, ty + 14, 52, 4);
+        } else if (tile === TILE.SIGN) {
+          // Post
+          ctx.fillStyle = '#8b4513';
+          ctx.fillRect(tx + 28, ty + 30, 8, 32);
+          // Sign board
+          ctx.fillStyle = '#deb887';
+          ctx.fillRect(tx + 10, ty + 14, 44, 20);
+          ctx.fillStyle = '#8b4513';
+          ctx.strokeStyle = '#654321';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(tx + 10, ty + 14, 44, 20);
         }
 
         // Grid lines (subtle)
-        ctx.strokeStyle = 'rgba(0,0,0,0.08)';
-        ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+        ctx.strokeRect(tx, ty, TILE_SIZE, TILE_SIZE);
       }
     }
 
@@ -233,7 +405,12 @@ const OverworldMap = () => {
       if (e.key === 'Enter') {
         const zone = getZoneAt(pos.x, pos.y);
         if (zone) {
-          setActiveRoom(zone);
+          // Trigger transition animation
+          setEnteringRoom(zone);
+          setTimeout(() => {
+            setActiveRoom(zone);
+            setEnteringRoom(null);
+          }, 600);
           return;
         }
       }
@@ -326,7 +503,7 @@ const OverworldMap = () => {
           </div>
         </button>
         <div className="text-sm text-primary">
-          🏕️ Cousinade 2026 — Retro Hub
+          🏕️ Cousinade 2026 Ardèche
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-accent">
@@ -367,6 +544,17 @@ const OverworldMap = () => {
         ← ↑ ↓ → pour se déplacer • Entrée pour interagir
       </div>
 
+      {/* Room Transition Animation */}
+      {enteringRoom && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center pointer-events-none">
+          <div className="room-transition-overlay" />
+          <div className="room-transition-text">
+            <span className="text-4xl mb-4">{ROOMS[enteringRoom].icon}</span>
+            <span className="text-xl text-primary">{ROOMS[enteringRoom].name}</span>
+          </div>
+        </div>
+      )}
+
       {/* Notifications */}
       <div className="fixed top-24 right-4 z-50 space-y-3 max-w-sm">
         {notifications.map(n => (
@@ -375,6 +563,9 @@ const OverworldMap = () => {
           </div>
         ))}
       </div>
+
+      {/* Music Player */}
+      <MusicPlayer />
 
       {/* Admin modal */}
       {showAdmin && (

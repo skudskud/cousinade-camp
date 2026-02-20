@@ -25,9 +25,11 @@ export interface Prompt {
   choices?: string[];
 }
 
-export const ROOMS: Record<RoomId, { name: string; prompts: Prompt[] }> = {
+export const ROOMS: Record<RoomId, { name: string; description: string; icon: string; prompts: Prompt[] }> = {
   cuisine: {
     name: '🍳 Cuisine',
+    description: 'Ici on organise les repas ! Partage tes idées de plats, tes allergies, ce que tu adores ou détestes, et si tu veux cuisiner. On va se régaler ensemble !',
+    icon: '🍳',
     prompts: [
       { key: 'repas_midi', label: 'Idées repas midi', type: 'text' },
       { key: 'repas_soir', label: 'Idées repas soir', type: 'text' },
@@ -42,6 +44,8 @@ export const ROOMS: Record<RoomId, { name: string; prompts: Prompt[] }> = {
   },
   jeux: {
     name: '🎲 Salle de jeux',
+    description: 'Le QG des activités sur place ! Dis-nous quels jeux de société tu ramènes, propose des jeux longue durée comme un Killer, et découvre ce que les autres veulent jouer.',
+    icon: '🎲',
     prompts: [
       { key: 'jeux_ramene', label: 'Jeux de société que je ramène', type: 'text' },
       { key: 'jeux_longue', label: 'Propositions de jeux longue durée (ex: Killer)', type: 'text' },
@@ -50,6 +54,8 @@ export const ROOMS: Record<RoomId, { name: string; prompts: Prompt[] }> = {
   },
   piscine: {
     name: '🏊 Piscine & Sorties',
+    description: 'Planifie les sorties et activités extérieures ! Randos, baignades, visites, canoë... Partage tes envies et ton budget pour qu\'on organise des aventures ensemble.',
+    icon: '🏊',
     prompts: [
       { key: 'activites_envie', label: "Activités que j'ai envie de faire", type: 'text' },
       { key: 'activites_pas_envie', label: "Activités que je n'ai pas envie de faire", type: 'text' },
@@ -71,27 +77,35 @@ export const TILE = {
   ZONE_PISCINE: 8,
   SIGN: 9,
   FLOWER: 10,
+  BUSH: 11,
+  APPLE_TREE: 12,
+  DUCK: 13,
+  RABBIT: 14,
+  RIVER: 15,
+  BRIDGE: 16,
 } as const;
 
 const T = TILE;
 
-// 20x15 map
+// 20x15 map - cleaner layout with fewer decorations
+// Legend: 0=grass, 1=tree, 2=water, 3=path, 4=rock, 5=cabin, 6=cuisine, 7=jeux, 8=piscine
+// 9=sign, 10=flower, 11=bush, 12=apple tree, 13=duck, 14=rabbit, 15=river, 16=bridge
 export const MAP_DATA: number[][] = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1],
-  [1,0,10,0,0,1,0,0,0,0,0,0,0,0,1,0,0,10,0,1],
-  [1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0,0,1],
-  [1,1,0,3,0,0,0,0,0,5,5,0,0,0,0,0,3,0,1,1],
-  [1,0,0,3,0,0,0,0,9,6,6,9,0,0,0,0,3,0,0,1],
-  [1,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,1],
-  [1,10,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,0,10,1],
-  [1,0,0,0,0,0,3,0,0,0,0,0,0,3,0,0,0,0,0,1],
-  [1,0,0,0,9,7,3,0,0,10,10,0,0,3,8,9,0,0,0,1],
-  [1,0,0,0,0,7,3,0,0,0,0,0,0,3,8,0,0,0,0,1],
+  [1,1,1,1,1,15,15,15,15,15,15,15,15,15,1,1,1,1,1,1],
+  [1,0,0,0,1,15,13,0,0,0,0,0,0,13,15,1,0,0,0,1],
+  [1,0,10,0,0,15,0,0,0,0,0,0,0,0,15,0,0,10,0,1],
+  [1,0,0,3,3,16,3,3,3,3,3,3,3,3,16,3,3,0,0,1],
+  [1,0,0,3,0,0,0,0,0,5,5,0,0,0,0,0,3,0,0,1],
+  [1,0,0,3,0,0,0,0,6,6,6,6,0,0,0,0,3,0,0,1],
+  [1,10,0,3,0,0,0,0,6,6,6,6,0,0,0,0,3,0,10,1],
+  [1,0,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,0,0,1],
+  [12,0,0,0,0,0,3,0,0,14,0,0,0,3,0,0,0,0,0,12],
+  [1,0,0,0,7,7,3,0,0,10,10,0,0,3,8,8,0,0,0,1],
+  [1,0,0,0,7,7,3,0,0,0,0,0,0,3,8,8,0,0,0,1],
   [1,0,10,0,0,0,3,3,3,3,3,3,3,3,0,0,0,10,0,1],
-  [1,0,0,0,0,0,0,0,2,2,2,2,0,0,0,0,0,0,0,1],
-  [1,0,0,4,0,0,0,0,2,2,2,2,0,0,0,0,4,0,0,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,14,0,4,0,0,0,0,0,0,0,0,0,0,0,0,4,0,14,1],
+  [1,1,12,1,1,1,1,1,1,1,1,1,1,1,1,1,1,12,1,1],
 ];
 
 export const MAP_WIDTH = 20;
@@ -100,14 +114,14 @@ export const TILE_SIZE = 64;
 
 export const ZONE_POSITIONS: Record<RoomId, { x: number; y: number }> = {
   cuisine: { x: 9, y: 5 },
-  jeux: { x: 5, y: 9 },
+  jeux: { x: 4, y: 9 },
   piscine: { x: 14, y: 9 },
 };
 
 export const SPAWN_POS = { x: 9, y: 7 };
 
 export function isSolid(tile: number): boolean {
-  return tile === T.TREE || tile === T.WATER || tile === T.ROCK || tile === T.CABIN || tile === T.SIGN;
+  return tile === T.TREE || tile === T.WATER || tile === T.ROCK || tile === T.CABIN || tile === T.SIGN || tile === T.APPLE_TREE || tile === T.RIVER;
 }
 
 export function getZoneAt(x: number, y: number): RoomId | null {

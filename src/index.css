@@ -198,4 +198,82 @@
   .pixel-shake {
     animation: shake 0.3s ease-in-out;
   }
+
+  /* Room transition animation - Jumanji style */
+  @keyframes room-swirl {
+    0% {
+      transform: scale(0) rotate(0deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.5) rotate(180deg);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(50) rotate(360deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes room-text-pop {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .room-transition-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, hsl(45 80% 60%) 0%, hsl(220 25% 18%) 100%);
+    animation: room-swirl 0.6s ease-in-out forwards;
+    z-index: 200;
+  }
+
+  .room-transition-text {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 201;
+    animation: room-text-pop 0.4s ease-out 0.1s forwards;
+    opacity: 0;
+    font-family: 'Press Start 2P', monospace;
+  }
+
+  /* Music player button */
+  .music-btn {
+    @apply fixed bottom-4 right-4 z-50 p-3 cursor-pointer transition-all;
+    background: hsl(var(--card));
+    border: 3px solid hsl(var(--border));
+    box-shadow: 3px 3px 0px 0px hsl(0 0% 0% / 0.4);
+  }
+
+  .music-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0px 0px hsl(0 0% 0% / 0.4);
+  }
+
+  .music-btn.playing {
+    border-color: hsl(var(--primary));
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 3px 3px 0px 0px hsl(0 0% 0% / 0.4), 0 0 8px hsl(var(--primary) / 0.3);
+    }
+    50% {
+      box-shadow: 3px 3px 0px 0px hsl(0 0% 0% / 0.4), 0 0 16px hsl(var(--primary) / 0.6);
+    }
+  }
 }

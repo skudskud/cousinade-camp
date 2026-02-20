@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+const basename = import.meta.env.PROD ? "/cousinade-camp" : "/";
 import PasswordGate from "./pages/PasswordGate";
 import IdentitySelection from "./pages/IdentitySelection";
 import AvatarBuilder from "./pages/AvatarBuilder";
@@ -25,7 +27,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename="/cousinade-camp">
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<PasswordGate />} />
           <Route path="/who" element={<IdentitySelection />} />

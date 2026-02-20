@@ -32,7 +32,7 @@ const PasswordGate = () => {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className={`retro-panel max-w-xl w-full text-center ${shaking ? 'pixel-shake' : ''}`}>
         <div className="mb-10">
-          <h1 className="retro-title text-xl mb-3">🏕️ Cousinade 2026</h1>
+          <h1 className="retro-title text-xl mb-3">🏕️ Cousinade 2026 Ardèche</h1>
           <h2 className="retro-title text-base">— Retro Hub —</h2>
         </div>
 
