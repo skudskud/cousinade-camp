@@ -25,7 +25,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/cousinade-camp">
         <Routes>
           <Route path="/" element={<PasswordGate />} />
           <Route path="/who" element={<IdentitySelection />} />
